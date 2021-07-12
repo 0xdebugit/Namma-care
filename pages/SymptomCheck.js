@@ -1,24 +1,28 @@
 import React, { useState, useEffect, useRef  } from 'react';
-import { Text, View, ScrollView, StatusBar, Dimensions, TouchableOpacity, Image,} from 'react-native';
-
+import { Text, View, ScrollView, StatusBar, Dimensions, TouchableOpacity, Image} from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
-
 import styles from '../styles/externalstyle';
+
 
 const deviceWidth = Dimensions.get('window').width;
 
-// Static Symptom Checker good for demo, but accuracy can be improved if it's dynamic
-
+// Static Symptom Checker good for offline usage, but accuracy can be improved once connected with my custom API
 function SymptomCheck({ route, navigation }){
     let scroll;
     const isFocused = useIsFocused();
     const scrollRef = useRef();
     const checkup_type = route.params.data;
     const id = route.params.id;
+
+    var temp_ans = '';
+    const [UserResponse,SetUserResponse] = useState('');
   
     const [Answer, SetAnswer] = useState([{'covid_19' : [], 'general_checkup' : [], 'fever' : []}]);
     const [Result, SetResult] = useState('');
+
+    // Storing all results in code for offline usage, once api is hosted online the results will be dynamic 
+    const [AppRec, SetAppRec] = useState({'fever' : `<div><p><b>Here are a few things to do for relief until the fever breaks:</b></p><ul><li>Drink plenty of fluids (e.g., water, juices, broth or oral hydration solution) to compensate for fluid loss from sweating, vomiting or diarrhea.</li><li>Get plenty of rest.</li><li>Remove extra blankets and clothing so heat can leave the body and help lower the body temperature (but don’t take off all the clothes, as that can lead to shivering and make body temperature rise again).</li><li>Keep the room temperature around 20°C to 21°C.</li></ul><p>Sponge baths with lukewarm water or alcohol are not recommended because they can cause additional shivering and alcohol can be absorbed through the skin.</p><p>Since fever protects the body from injury or infection, doctors generally only treat fevers above 102°F (38.9°C) in children, and above 101.3°F (38.5°C) in adults. However, fevers in children less than 6 months old should be reported to a doctor immediately.</p><p><b>Up to about 8 weeks of age, a fever can be a sign of a serious underlying disease, since newborns don’t have other symptoms when they have an infection.</b> They also can’t fight infections as well as older children, so their infections are more likely to spread to other parts of their body.</p></div>`, 'general_checkup' : `<div class="elementor-text-editor elementor-clearfix"><p><b>Since tension headaches are caused by factors such as neck strain, stress, and anxiety, treatment involves eliminating the stressful situation, if possible.</b> Taking an over-the-counter pain reliever and finding ways to relax, rest, correct poor posture, and regular exercise can all help to relieve and prevent headache pain.</p><p><b>Cluster headaches</b> respond poorly to over-the-counter medications. Oxygen therapy and prescription medications can help.</p><p><b>Sinus headaches</b> usually require antibiotics or other treatments to clear up the infection. Once the infection is gone, the headache will go away, too. Until the infection gets better, taking an over-the-counter pain reliever can help ease the pain.</p><p><b>Migraines</b> can be treated with over-the-counter pain relievers, such as acetaminophen or ibuprofen, if the headaches are mild.</p></div>`, 'covid_19' : `<div><p>Since COVID-19 is thought to mainly be spread from person to person, practising good hand hygiene is one of the most important things you can do to keep yourself from being infected. Wear a face mask whenever possible, as the virus can stay in the air. Avoid touching your eyes, nose, and mouth with unclean hands. You should try to minimize your chances of being exposed to the virus by avoiding contact with people who are sick. If you are sick, you should cover your nose and mouth when sneezing and coughing.</p></div>`});
   
     // This should be dynamic, processing can be done at server and send reponse in JSON
     const static_final_recommendation = [{'covid_19' : {'bad' : 'Seek immediate medical care', 'ok_1' : 'Remain at home and avoid unnecessary contact', 'ok_2' : 'Remain at home and avoid unnecessary contact', 'good' : 'Stay home and monitor your symptoms.'} }, {'general_checkup' : {'bad' : 'You may have the COLD or the FLU. Get plenty of rest and drink plenty of water. If your symptoms get worse, see a doctor immediately.', 'ok_1' : 'Your headaches may be due to VISION PROBLEMS. Give yourself frequent eye breaks while reading or studying for extended periods of time. If your symptoms get worse, see a doctor immediately.', 'ok_2' : 'Your headaches may be from HYPOGLYCEMIA (i.e., low blood sugar). You can also try eating 6 small meals a day rather than 3 large meals. This may regulate your blood sugar. If your symptoms get worse, see a doctor immediately.', 'good' : 'Take care of your self, If your symptoms get worse, see a doctor immediately.'} }, {'fever' : {'bad' : 'Over-the-counter- medicines may help relieve your symptoms. Your symptoms may require medical evaluation. Schedule an appointment with your doctor.', 'ok_1' : 'You may have MONONUCLEOSIS (also known as MONO), which is a viral infection that can lead to swollen glands in your neck and a swollen/tender spleen. If your symptoms get worse, see a doctor immediately.', 'ok_2' : 'You may have GASTROENTERITIS, an intestinal infection commonly called the STOMACH FLU. If your symptoms get worse, see a doctor immediately.', 'good' : 'Take care of your self, If your symptoms get worse, see a doctor immediately.'} }]
@@ -26,13 +30,17 @@ function SymptomCheck({ route, navigation }){
     // Test answer logic, again the reponse can be dynamic from server
     const test_answers = {"covid_19_results":["bad","ok_1","ok_2","good"],"covid_19":[{"bad":["Yes","Yes"]},{"ok_1":["Yes","No"]},{"ok_2":["No","Yes"]},{"good":["No","No"]}],"general_checkup_results":["bad","ok_1","ok_2","good"],"general_checkup":[{"bad":["Yes","Yes"]},{"ok_1":["Yes","No"]},{"ok_2":["No","Yes"]},{"good":["No","No"]}],"fever_results":["bad","ok_1","ok_2","good"],"fever":[{"bad":["Yes","Yes"]},{"ok_1":["Yes","No"]},{"ok_2":["No","Yes"]},{"good":["No","No"]}]}
   
-    const nextPage = (indexx, data, required) => {
+    const nextPage = (indexx, data, required, query, stage) => {
       let newArr = [...Answer];
       
       if(required){
         newArr[0][checkup_type] = [...newArr[0][checkup_type],data];
+        
+        temp_ans+=`<h4>${query}</h4><h4>${data}</h4>`;
         SetAnswer(newArr);
       }
+      console.log(temp_ans);
+      SetUserResponse(UserResponse+temp_ans);
       
       // Pagination
       scrollRef.current?.scrollTo({ x: deviceWidth * (indexx + 1) })
@@ -42,7 +50,6 @@ function SymptomCheck({ route, navigation }){
             SetResult(item);
           }
         });
-     
       }
     }  
   
@@ -82,7 +89,7 @@ function SymptomCheck({ route, navigation }){
                 <Text style={styles.title}>{option.text}</Text>
                 <View style={{justifyContent: 'space-between', padding: 10}}>
                   {option.options.map((item,index) => 
-                  <TouchableOpacity style={{alignSelf: 'flex-end',paddingHorizontal: 40,paddingVertical: 10, borderWidth: 1, borderRadius: 20, borderColor: '#2692eb', marginTop: 10 }} onPress={() => nextPage(indexx, item, option.required)} key={index}>
+                  <TouchableOpacity style={{alignSelf: 'flex-end',paddingHorizontal: 40,paddingVertical: 10, borderWidth: 1, borderRadius: 20, borderColor: '#2692eb', marginTop: 10 }} onPress={() => nextPage(indexx, item, option.required, option.text, option.process)} key={index}>
                     <Text style={{textAlign: 'center', fontFamily: 'Poppins_400Regular', color: '#2692eb'}}>{item}</Text>
                   </TouchableOpacity>
                   )}        
@@ -110,9 +117,14 @@ function SymptomCheck({ route, navigation }){
                     <Text style={{textAlign: 'center', color: 'white'}}>Book a Consultation</Text>
                   </TouchableOpacity>
     
+                  <TouchableOpacity style={{alignSelf: 'flex-end', paddingHorizontal: 20,paddingVertical: 10, borderWidth: 1, borderRadius: 20, borderColor: 'black', marginTop: 10 }} onPress={() => navigation.navigate('DownloadReport', {data: UserResponse, rec : AppRec[checkup_type]})} >
+                    <Text style={{textAlign: 'center', color: 'black'}}>Get Report</Text>
+                  </TouchableOpacity>      
+                  
                   <TouchableOpacity style={{alignSelf: 'flex-end', paddingHorizontal: 20,paddingVertical: 10, borderWidth: 1, borderRadius: 20, borderColor: '#001f3f', marginTop: 10 }} onPress={() => goBack()} >
                     <Text style={{textAlign: 'center', color: 'black'}}>Close</Text>
-                  </TouchableOpacity>              
+                  </TouchableOpacity>
+                          
           
                 </View>          
               </View>          

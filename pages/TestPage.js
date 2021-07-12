@@ -3,11 +3,18 @@ import { Text, View, TouchableOpacity, FlatList, SafeAreaView} from 'react-nativ
 
 import { Ionicons } from '@expo/vector-icons';
 import styles from '../styles/externalstyle';
+import { useIsFocused } from '@react-navigation/native';
 
 function TestPage({navigation}){
 
+  const isFocused = useIsFocused();
+
+    useEffect(() => {
+
+    },[isFocused]);
+
     // List of Symptom check enabled
-    const test_list = [{"name":"Covid-19 Test","id":"0","disabled":"false","check":"covid_19"},{"name":"Headaches","id":"1","disabled":"false","check":"general_checkup"},{"name":"Fever","id":"2","disabled":"false","check":"fever"},{"name":"Skin Rashes","id":"3","disabled":"true","check":"general_checkup_arc"},{"name":"Neck Pain","id":"4","disabled":"true","check":"general_checkup_arc"},{"name":"Nausea & Vomiting","id":"5","disabled":"true","check":"general_checkup_arc"},{"name":"Hearing Problems","id":"6","disabled":"true","check":"general_checkup_arc"},{"name":"Genital Problems","id":"7","disabled":"true","check":"general_checkup_arc"},{"name":"Hair Loss","id":"8","disabled":"true","check":"general_checkup_arc"}];
+    const test_list = [{"name":"Search HCPs","id":"-1","disabled":"active","check":"covid_19"},{"name":"Covid-19 Test","id":"0","disabled":"false","check":"covid_19"},{"name":"Headaches","id":"1","disabled":"false","check":"general_checkup"},{"name":"Fever","id":"2","disabled":"false","check":"fever"},{"name":"Skin Rashes","id":"3","disabled":"true","check":"general_checkup_arc"},{"name":"Neck Pain","id":"4","disabled":"true","check":"general_checkup_arc"},{"name":"Nausea & Vomiting","id":"5","disabled":"true","check":"general_checkup_arc"},{"name":"Hearing Problems","id":"6","disabled":"true","check":"general_checkup_arc"},{"name":"Genital Problems","id":"7","disabled":"true","check":"general_checkup_arc"},{"name":"Hair Loss","id":"8","disabled":"true","check":"general_checkup_arc"}];
   
     const Item = ({data}) => {
       if(data.disabled == 'false'){
@@ -18,12 +25,24 @@ function TestPage({navigation}){
             </TouchableOpacity>
           </View>
         );
-      }else{
+      }else if(data.disabled == 'true'){
         return(			
           <View style={[styles.inactive_topline]}>
           <TouchableOpacity disabled={true}>
             <Text style={{ padding: 20,fontSize: 18, textAlign: 'center', color: 'grey'}}>{data.name}</Text>
             </TouchableOpacity>
+          </View>
+        );
+      }else if(data.disabled == 'active'){
+        return(			
+          <View>
+            <View style={[styles.active_topline]}>
+            <TouchableOpacity onPress={() => navigation.navigate('SearchHCP', {specialist_id : 'SP.WCA.01'})} >
+              <Text style={{ padding: 20,fontSize: 18, textAlign: 'center', color: 'green'}}>{data.name}</Text>
+              </TouchableOpacity>
+            </View>
+            <Text style={{textAlign: 'center', marginVertical: 10}}>OR</Text>
+            <Text style={{fontSize:25,color:'#014c7a', fontFamily: 'Poppins_600SemiBold', textAlign: 'center'}}>Check your Symptoms</Text>
           </View>
         );
       }
@@ -39,7 +58,7 @@ function TestPage({navigation}){
       return (
         <View elevation={1} 
         >
-          <Text style={{fontSize:25,color:'#014c7a', fontFamily: 'Poppins_600SemiBold', marginTop: 50}}>Check your Symptoms</Text>
+          <Text style={{fontSize:25,color:'#014c7a', fontFamily: 'Poppins_600SemiBold'}}></Text>
         </View>
       );
     }

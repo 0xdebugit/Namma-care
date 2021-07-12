@@ -34,11 +34,11 @@ export default StyleSheet.create({
 	},
 	title: {
 		fontSize: 20,
-		color: '#828282',
+		color: 'black',
 		textAlign: 'left',
 		padding: 20,
 		alignSelf: 'flex-start',
-		fontFamily: 'Poppins_400Regular'
+		fontFamily: 'Poppins_500Medium'
 	},
 	buttonCircle: {
 		width: 44,
@@ -68,6 +68,16 @@ export default StyleSheet.create({
 		backgroundColor: "#d4d3cf",
 		marginTop: 20
 	},
+	active_topline: {
+		borderRadius: 53,
+		elevation: 5,
+		// height: 100,
+		flex:1,
+		borderWidth: 1,
+		borderColor: 'green',
+		backgroundColor: "#e4f7e5",
+		// marginTop: 20
+	},	
 	homecard : {
 		borderRadius: 20,
 		elevation: 5,

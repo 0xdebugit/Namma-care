@@ -34,7 +34,7 @@ function GetVaccinated({navigation}){
 
         SetCountrySelected(country_name);
   
-        let fsdata = await fetch('https://jsonkeeper.com/b/OLDX')
+        let fsdata = await fetch('https://jsonkeeper.com/b/47CI')
         .then((response) => response.json())
         .then((json) => {
           SetCountryData(json);
@@ -51,12 +51,12 @@ function GetVaccinated({navigation}){
     }, [isFocused]);
     
     return(
-      <SafeAreaView style={{ flex: 1, padding: 10, marginTop: 50}}>
+      <SafeAreaView style={{ flex: 1, padding: 10, marginTop: 20}}>
         { CountryData.map(item => {
             if(item.location == CountrySelected){
               return(
                 <View style={{padding: 20, borderWidth: 1, borderRadius: 30, backgroundColor: '#001f3f', elevation: 150,}} key={item.iso_code}>
-                  <Text style={{color: 'white', fontSize: 25, fontFamily: 'Poppins_500Medium'}}>Vaccination Status</Text>
+                  <Text style={{color: 'white', fontSize: 25, fontFamily: 'Poppins_500Medium', textDecorationLine: 'underline'}}>Vaccination Status</Text>
                   <Text style={{color: 'white', fontSize: 30, fontFamily: 'Poppins_400Regular'}}>{item.location}</Text>
                   <Text style={{color: 'white', fontSize: 15, fontFamily: 'Poppins_600SemiBold', marginTop: 20}}>Available Vaccines : </Text>
                   <Text style={{color: 'white', fontSize: 15, fontFamily: 'Poppins_400Regular'}}>{item.vaccines}</Text>

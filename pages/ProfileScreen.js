@@ -81,7 +81,7 @@ function ProfileScreen({navigation}){
     }  
   
     return(
-      <View style={{flex: 1,marginTop: 50}}>
+      <View style={{flex: 1,marginTop: 10}}>
   
         <View style={{flexDirection: 'row', marginTop: StatusBar.currentHeight || 0, padding: 10}}>
           <Ionicons name="information-circle" color={'grey'} size={20}/>

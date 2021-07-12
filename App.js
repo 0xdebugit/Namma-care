@@ -12,6 +12,8 @@ import SymptomCheck from './pages/SymptomCheck';
 import GetVaccinated from './pages/GetVaccinated';
 import ProfileScreen from './pages/ProfileScreen';
 import AboutScreen from './pages/AboutScreen';
+import SearchHCP from './pages/SearchHCP';
+import DownloadReport from './pages/DownloadReport';
 
 import {
 	useFonts,
@@ -41,9 +43,23 @@ const Drawer = createDrawerNavigator();
 function TestChecklist() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="TestPage" component={TestPage} options={{ title: "Symptom Check list", headerShown: false }}  />
+      <Stack.Screen name="TestPage" component={TestPage}
+        options={{
+          title: "Namma Care",
+          headerStyle: {
+            backgroundColor: '#014c7a',
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            // fontSize: 25, 
+            fontFamily: 'Poppins_600SemiBold',
+          },
+        }}
+  />
       <Stack.Screen name="SymptomCheck" component={SymptomCheck} options={{ title: "Symptom Check list", headerShown: false }} />
       <Stack.Screen name="HCPList" component={HCPList} options={{ title: "HCP Near me", headerShown: true }} />
+      <Stack.Screen name="SearchHCP" component={SearchHCP} options={{ title: "Search HCPs", headerShown: true }} />
+      <Stack.Screen name="DownloadReport" component={DownloadReport} options={{ title: "Download Report", headerShown: true }} />
     </Stack.Navigator>
   );
 }
@@ -51,7 +67,18 @@ function TestChecklist() {
 function CheckVaccination() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="GetVaccinated" component={GetVaccinated} options={{ title: "Vaccination", headerShown: false }}  />
+      <Stack.Screen name="GetVaccinated" component={GetVaccinated}
+        options={{
+          title: "Namma Care",
+          headerStyle: {
+            backgroundColor: '#014c7a',
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            // fontSize: 25, 
+            fontFamily: 'Poppins_600SemiBold',
+          },
+        }}  />
       <Stack.Screen name="HCPList" component={HCPList} options={{ title: "HCP Near me", headerShown: true }} />
     </Stack.Navigator>
   );
@@ -60,7 +87,18 @@ function CheckVaccination() {
 function ProfilePage() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="ProfileScreen" component={ProfileScreen} options={{ title: "Profile", headerShown: false }}  />
+      <Stack.Screen name="ProfileScreen" component={ProfileScreen}
+        options={{
+          title: "Namma Care",
+          headerStyle: {
+            backgroundColor: '#014c7a',
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            // fontSize: 25, 
+            fontFamily: 'Poppins_600SemiBold',
+          },
+        }} />
     </Stack.Navigator>
   );
 }
@@ -68,7 +106,18 @@ function ProfilePage() {
 function AboutPage() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="AboutScreen" component={AboutScreen} options={{ title: "Profile", headerShown: false }}  />
+      <Stack.Screen name="AboutScreen" component={AboutScreen}
+        options={{
+          title: "Namma Care",
+          headerStyle: {
+            backgroundColor: '#014c7a',
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            // fontSize: 25, 
+            fontFamily: 'Poppins_600SemiBold',
+          },
+        }} />
     </Stack.Navigator>
   );
 }
